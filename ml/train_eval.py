@@ -2,6 +2,7 @@ import argparse, numpy as np, pandas as pd, joblib
 from pathlib import Path
 from typing import Dict, Any
 
+from joblib import dump
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
@@ -15,11 +16,11 @@ from ml.features import normalize, rolling_form, build_matrix
 
 SPACE = {
   "logreg": {
-      "logisticregression__C": [0.1,1,3,10], # Coprono ordini di grandezza diversi, da forte a debole regolarizzazione
+      "logisticregression__C": [0.1,1,3,10],        # Coprono ordini di grandezza diversi, da forte a debole regolarizzazione
       "logisticregression__max_iter":[300]
   },
   "svm": {
-      "svc__C": [0.5,1,3],                  # serve per vedere se conviene avere un margine ampio (più regolarizzato) o stretto (più flessibile)
+      "svc__C": [0.5,1,3],                          # serve per vedere se conviene avere un margine ampio (più regolarizzato) o stretto (più flessibile)
       "svc__kernel": ["linear","rbf"]
   },
   "rf": {
@@ -71,6 +72,8 @@ def find_best_model(xtr, ytr, tscv):
     for name, est in models().items():
         gs = GridSearchCV(est, SPACE[name], cv=tscv, scoring="accuracy", n_jobs=-1)
         gs.fit(xtr, ytr)
+        # salva l'oggetto GridSearch per uso successivo
+        dump(gs, f"artifacts/grid_{name}.joblib")
         # metriche CV sul TRAIN
         cv_result = _cv_metrics(gs.best_estimator_, xtr, ytr, tscv)
         row = dict(model=name,

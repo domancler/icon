@@ -29,8 +29,8 @@ def _score_tuple(matches, sol, k, min_draw, max_low_margin, low_threshold):
     if draws < min_draw: return -1.0, 0.0, 0.0
     if max_low_margin is not None and lm_cnt > max_low_margin: return -1.0, 0.0, 0.0
 
-    avg_pick = sum(probs) / k                    # obiettivo primario
-    avg_margin = margin_sum / k                  # tie-break più “sicurezza”
+    avg_pick = sum(probs) / k
+    avg_margin = margin_sum / k
 
     return avg_pick, avg_margin, draws
 
@@ -172,7 +172,7 @@ def run(
         matches.append((label, m["p_H"], m["p_D"], m["p_A"]))
 
     sel_idx, score = hill_climb(matches, k=num_matches, min_draw=min_draw, max_low_margin=max_low_margin)
-    print("Schedina ottimizzata:")
+    print("Schedina con rischio controllato:")
     for (idx, pick) in sel_idx:
         label, pH, pD, pA = matches[idx]
         home, away = label.split(" - ", 1)
