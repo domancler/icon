@@ -38,13 +38,13 @@ python -m ml.train_eval
 python -m tools.predict_ticket --date "20/09/2025"
 
 # Predizione una o più partite da file
-python -m tools.predict_ticket --date "20/09/2025" --infile "matches.txt"
+python -m tools.predict_ticket --date "20/09/2025" --infile "percorsoassoluto\matches.txt"
 
 # Generazione schedina con rischio controllato da stdin
 python -m search.fixture_selector --date "20/09/2025"
 
 # Generazione schedina con rischio controllato da file
-python -m search.fixture_selector --date "20/09/2025" --infile "matches.txt"
+python -m search.fixture_selector --date "20/09/2025" --infile "percorsoassoluto\matches.txt"
 ```
 
 ---
